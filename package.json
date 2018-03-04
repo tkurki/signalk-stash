@@ -17,7 +17,7 @@
     "influx": "^5.0.0",
     "lodash.groupby": "^4.6.0",
     "ngeohash": "^0.6.0",
-    "signalk-server": "github:SignalK/signalk-server-node",
+    "signalk-server": "1.0.0",
     "sqlite": "^2.8.0",
     "uuid": "^3.1.0"
   }
