@@ -1,4 +1,3 @@
-const Influx = require('influx')
 const debug = require('debug')('toStash')
 
 const { Transform } = require('stream')
@@ -34,7 +33,7 @@ ToStash.prototype._transform = function (delta, encoding, done) {
     })
 }
 
-ToStash.prototype.deltaToInsertables = function(
+ToStash.prototype.deltaToInsertables = function (
   delta,
   isForInflux = () => true, // option for black/whitelisting paths for InfluxDb storage
   useDeltaTimestamp = true
@@ -52,7 +51,6 @@ ToStash.prototype.deltaToInsertables = function(
             positions.push({ value: pathValue.value, timestamp })
 
             if (timestamp.getTime() - this.lastPositionStored > 1000) {
-              console.log('position')
               acc.push({
                 measurement: pathValue.path,
                 timestamp: timestamp,
