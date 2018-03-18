@@ -14,6 +14,7 @@ class ToStash extends Transform {
     this.influxDb = influxDb(options.influx)
     this.points = []
     this.lastPositionStored = 0
+    this.isForInflux = options.isForInflux || (() => true)
   }
 }
 
@@ -35,7 +36,6 @@ ToStash.prototype._transform = function (delta, encoding, done) {
 
 ToStash.prototype.deltaToInsertables = function (
   delta,
-  isForInflux = () => true, // option for black/whitelisting paths for InfluxDb storage
   useDeltaTimestamp = true
 ) {
   let points = []
@@ -64,7 +64,7 @@ ToStash.prototype.deltaToInsertables = function (
               this.lastPositionStored = timestamp.getTime()
             }
           }
-          if (isForInflux(pathValue.path, update['$source'])) {
+          if (this.isForInflux(pathValue.path, update['$source'])) {
             if (
               typeof pathValue.value === 'number' &&
               !isNaN(pathValue.value)
