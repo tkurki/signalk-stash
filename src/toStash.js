@@ -15,6 +15,7 @@ class ToStash extends Transform {
     this.points = []
     this.lastPositionStored = 0
     this.isForInflux = options.isForInflux || (() => true)
+    this.influxBatchSize = options = this.influxBatchSize || 10
   }
 }
 
@@ -22,7 +23,7 @@ ToStash.prototype._transform = function (delta, encoding, done) {
   const { points, positions } = this.deltaToInsertables(delta)
   this.points = this.points.concat(points)
   const promises = [this.trackDb.writePositions(positions)]
-  if (this.points.length > 1000) {
+  if (this.points.length > this.influxBatchSize) {
     promises.push(this.influxDb.writePoints(points))
   }
   Promise.all(promises)
